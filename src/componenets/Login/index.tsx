@@ -1,34 +1,44 @@
-import { FormEvent, useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { FormEvent, useEffect, useState } from "react";
+import { Alert, Button, Container, Form } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { AppDispatch } from "../../redux/store";
 import { login } from "../../redux/UserStore/slice";
 
 function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [showWarning, setShowWarning] = useState<boolean>(false);
+  // const auth = useSelector((state) => (state as any).user);
 
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = (e: FormEvent) => {
+  useEffect(() => {
+    setShowWarning(false);
+  }, [email, password]);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setShowWarning(false);
 
-    dispatch(login({ email, password }));
+    await dispatch(login({ email, password }));
 
     const auth = JSON.parse(localStorage.getItem("user")!);
 
     if (!auth?.authenticated) {
-      return alert("Unable to login. Please retry.");
+      setShowWarning(true);
     }
     if (auth?.user?._id) {
-      (window.location as any) = "/";
+      (window.location as any) = location?.state ?? "/";
     }
   };
 
   return (
     <Container>
+      <Alert variant="warning" show={showWarning}>
+        Unable to login. Please retry.
+      </Alert>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
