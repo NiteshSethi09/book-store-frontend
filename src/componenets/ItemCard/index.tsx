@@ -1,5 +1,5 @@
 import { Card, Button } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/Cart/slice";
 import { AppDispatch } from "../../redux/store";
 
@@ -27,7 +27,9 @@ function ItemCard({ description, imageUrl, price, title, _id }: cardProps) {
   };
 
   return (
-    <Card style={{ marginBottom: "10px" }}>
+    <Card
+      style={{ marginBottom: "10px", alignItems: "stretch", display: "flex" }}
+    >
       <Card.Img
         style={{ height: "300px" }}
         variant="top"
@@ -36,11 +38,10 @@ function ItemCard({ description, imageUrl, price, title, _id }: cardProps) {
       />
       <Card.Body>
         <Card.Title>{title}</Card.Title>
-        <Card.Text>{description}</Card.Text>
+        {/* <Card.Text>{description}</Card.Text> */}
         <Card.Text>RS. {price.offerPrice}</Card.Text>
       </Card.Body>
       <Card.Body>
-        {/* <Button variant="danger">Delete</Button> */}
         <Button variant="primary" onClick={() => handleAdd(_id)}>
           Add to cart
         </Button>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { axiosInstance } from "../../utils/axiosInstance";
-import ItemCard, { cardProps } from "../Card";
+import ItemCard, { cardProps } from "../ItemCard";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
