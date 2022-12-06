@@ -1,7 +1,7 @@
 import { Button, Card, CardGroup, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Item, orderCreated } from "../../redux/Cart/slice";
+import { cartActions, Item, orderCreated } from "../../redux/Cart/slice";
 import { AppDispatch } from "../../redux/store";
 import { Auth } from "../../redux/UserStore/slice";
 import Counter from "../Counter";
@@ -45,12 +45,17 @@ const Cart = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     if (!isUserLoggedIn) {
       return navigate("/login", { state: location.pathname });
     }
 
-    dispatch(orderCreated(""));
+    const result = await dispatch(orderCreated());
+
+    if (result.type === `${cartActions.orderCreated}/rejected`) {
+      return alert(result.payload);
+    }
+    alert("Order created Successfully.");
   };
 
   return (

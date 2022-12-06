@@ -26,25 +26,27 @@ function NavbarTop() {
             style={{ maxHeight: "180px" }}
             navbarScroll
           >
-            {/* <Nav.Link> */}
             <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
               Home
             </Link>
-            {/* </Nav.Link> */}
+            <Link
+              to="/cart"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              cart
+            </Link>
             {authenticated ? (
               <>
                 <Nav.Link onClick={handleLogout}>logout</Nav.Link>
               </>
             ) : (
               <>
-                {/* <Nav.Link> */}
                 <Link
                   to="/login"
                   style={{ color: "inherit", textDecoration: "none" }}
                 >
                   login
                 </Link>
-                {/* </Nav.Link> */}
               </>
             )}
           </Nav>

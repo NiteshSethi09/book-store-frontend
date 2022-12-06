@@ -19,10 +19,15 @@ const initialState: Auth = {
     (JSON.parse(localStorage.getItem("user")!) as Auth)?.authenticated || false,
 };
 
+const userActions = {
+  login: "user/login",
+  logout: "user/logout",
+};
+
 localStorage.setItem("user", JSON.stringify(initialState));
 
 export const login = createAsyncThunk(
-  "user/login",
+  userActions.login,
   async (user: { email: string; password: string }, thunkAPI) => {
     try {
       return await userService.login(user!);
@@ -32,7 +37,7 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk("user/logout", async () => {
+export const logout = createAsyncThunk(userActions.logout, async () => {
   return await userService.logout();
 });
 

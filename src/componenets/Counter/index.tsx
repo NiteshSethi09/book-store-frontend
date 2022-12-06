@@ -33,7 +33,6 @@ const Counter = ({ quantity, productId }: CounterProps) => {
           <Button
             variant="outline-primary"
             onClick={() => handleDelete(productId)}
-            disabled={quantity > 1 ? false : true}
           >
             -
           </Button>
