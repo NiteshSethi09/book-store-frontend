@@ -18,7 +18,7 @@ function NavbarTop() {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="#">Book Store</Navbar.Brand>
+        <Navbar.Brand href="/">Book Store</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll" style={{ justifyContent: "end" }}>
           <Nav
@@ -46,6 +46,12 @@ function NavbarTop() {
                   style={{ color: "inherit", textDecoration: "none" }}
                 >
                   login
+                </Link>
+                <Link
+                  to="/signup"
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
+                  signup
                 </Link>
               </>
             )}

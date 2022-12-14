@@ -1,10 +1,13 @@
 import { Button, Card, CardGroup, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { cartActions, Item, orderCreated } from "../../redux/Cart/slice";
-import { AppDispatch } from "../../redux/store";
-import { Auth } from "../../redux/UserStore/slice";
+import useRazorpay from "react-razorpay";
 import Counter from "../Counter";
+import { clearCart, Item } from "../../redux/Cart/slice";
+import { AppDispatch } from "../../redux/store";
+import { Auth, User } from "../../redux/UserStore/slice";
+import { axiosInstance } from "../../utils/axiosInstance";
+import { razorpayKeyId } from "../../utils/config";
 
 function CartItemCard({ product, quantity }: Item) {
   return (
@@ -44,18 +47,58 @@ const Cart = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
+  const Razorpay = useRazorpay();
 
   const handleOrder = async () => {
     if (!isUserLoggedIn) {
-      return navigate("/login", { state: location.pathname });
+      return navigate("/login", { state: { redirectTo: location.pathname } });
     }
 
-    const result = await dispatch(orderCreated());
+    await handlePayment();
+  };
 
-    if (result.type === `${cartActions.orderCreated}/rejected`) {
-      return alert(result.payload);
+  const createOrder = async (items: Item[], user: User) => {
+    const result = await axiosInstance.post("/razorpay/create-order", {
+      items,
+      user,
+    });
+
+    return result.data;
+  };
+
+  const handlePayment = async () => {
+    const user = (JSON.parse(localStorage.getItem("user")!) as Auth)?.user;
+
+    const order = await createOrder(cartItems, user!);
+
+    if (order.error) {
+      return alert(order.message);
     }
-    alert("Order created Successfully.");
+
+    const options = {
+      key: razorpayKeyId,
+      amount: order.data.amount,
+      currency: order.data.currency,
+      name: user!.name,
+      image:
+        "https://camo.githubusercontent.com/61e102d7c605ff91efedb9d7e47c1c4a07cef59d3e1da202fd74f4772122ca4e/68747470733a2f2f766974656a732e6465762f6c6f676f2e737667",
+      order_id: order.data.id,
+      handler: function (res: any) {
+        console.log(res);
+        dispatch(clearCart());
+        alert("Yay! you make an order successfully.");
+      },
+      prefill: {
+        name: user?.name,
+        email: user?.email,
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    const rzp1 = new Razorpay(options);
+    rzp1.open();
   };
 
   return (

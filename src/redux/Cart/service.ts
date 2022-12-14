@@ -79,6 +79,7 @@ const cartService = {
   addProduct,
   removeOrDeleteProduct,
   orderCreated,
+  clearCart,
 };
 
 export default cartService;
