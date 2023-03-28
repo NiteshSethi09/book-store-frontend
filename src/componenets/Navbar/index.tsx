@@ -22,28 +22,52 @@ function NavbarTop() {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll" style={{ justifyContent: "end" }}>
           <Nav
-            className=" my-2 my-lg-0"
-            style={{ maxHeight: "180px" }}
+            className="my-2 my-lg-0"
+            style={{ maxHeight: "180px", display: "flex" }}
             navbarScroll
           >
-            <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
+            <Link
+              to="/"
+              style={{
+                color: "inherit",
+                textDecoration: "none",
+                marginRight: "1rem",
+              }}
+            >
               Home
             </Link>
             <Link
               to="/cart"
-              style={{ color: "inherit", textDecoration: "none" }}
+              style={{
+                color: "inherit",
+                textDecoration: "none",
+                marginRight: "1rem",
+              }}
             >
               cart
             </Link>
             {authenticated ? (
               <>
-                <Nav.Link onClick={handleLogout}>logout</Nav.Link>
+                <Link
+                  onClick={handleLogout}
+                  to=""
+                  style={{
+                    color: "inherit",
+                    // textDecoration: "none",
+                  }}
+                >
+                  logout
+                </Link>
               </>
             ) : (
               <>
                 <Link
                   to="/login"
-                  style={{ color: "inherit", textDecoration: "none" }}
+                  style={{
+                    color: "inherit",
+                    textDecoration: "none",
+                    marginRight: "1rem",
+                  }}
                 >
                   login
                 </Link>
