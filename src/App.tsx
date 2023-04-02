@@ -8,6 +8,7 @@ const IdentifyEmail = lazy(() => import("./componenets/IdentifyEmail"));
 const Signup = lazy(() => import("./componenets/Signup"));
 const NotFound = lazy(() => import("./componenets/NotFound"));
 const ResetPassword = lazy(() => import("./componenets/ResetPassword"));
+const VerifyAccount = lazy(() => import("./pages/VerifyAccount"));
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/verify-account/:token" element={<VerifyAccount />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
