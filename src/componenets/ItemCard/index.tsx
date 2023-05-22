@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Card, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/Cart/slice";
@@ -50,4 +51,4 @@ function ItemCard({ description, imageUrl, price, title, _id }: cardProps) {
   );
 }
 
-export default ItemCard;
+export default memo(ItemCard);
