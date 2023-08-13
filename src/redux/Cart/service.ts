@@ -1,6 +1,5 @@
-import { axiosInstance } from "../../utils/axiosInstance";
-import { Auth, User } from "../UserStore/slice";
-import { Cart, Item } from "./slice";
+import { getProductByIdAPI } from "@/api/product";
+import type { Cart, Item } from "./slice";
 
 const addProduct: (id: string) => Promise<Item[]> = async (id: string) => {
   const allProducts: Cart = JSON.parse(localStorage.getItem("cart")!);
@@ -14,7 +13,7 @@ const addProduct: (id: string) => Promise<Item[]> = async (id: string) => {
     newQuantity = allProducts.items[itemIndex].quantity + 1;
     allProducts.items[itemIndex].quantity = newQuantity;
   } else {
-    const { data } = await axiosInstance.post("/product/get-by-id", { id });
+    const data = await getProductByIdAPI(id);
 
     if (data.error) {
       throw new Error(data.message);
@@ -54,31 +53,9 @@ const clearCart = () => {
   return allProducts.items;
 };
 
-const orderCreated = async () => {
-  const allProducts: Cart = JSON.parse(localStorage.getItem("cart")!);
-  const logedInUser: User = (JSON.parse(localStorage.getItem("user")!) as Auth)
-    ?.user as User;
-
-  const { data } = await axiosInstance.post("/user/place-order", {
-    items: allProducts.items,
-    user: {
-      userId: logedInUser._id,
-      name: logedInUser.name,
-    },
-  });
-  console.log(data);
-
-  if (data.error) {
-    throw new Error(data.message);
-  } else {
-    return clearCart();
-  }
-};
-
 const cartService = {
   addProduct,
   removeOrDeleteProduct,
-  orderCreated,
   clearCart,
 };
 

@@ -1,16 +1,15 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Alert, Button, Card, Container, Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AppDispatch } from "../../redux/store";
-import { login } from "../../redux/UserStore/slice";
+import { AppDispatch } from "@/redux/store";
+import { login } from "@/redux/UserStore/slice";
 
 function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showWarning, setShowWarning] = useState<boolean>(false);
   const [showAlert, setshowAlert] = useState<boolean>(false);
-  // const auth = useSelector((state) => (state as any).user);
 
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
@@ -36,7 +35,7 @@ function Login() {
     if (!auth?.authenticated) {
       setShowWarning(true);
     }
-    if (auth?.user?._id) {
+    if (auth?.user?.accessToken) {
       (window.location as any) = location?.state?.redirectTo ?? "/";
     }
   };

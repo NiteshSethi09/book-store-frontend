@@ -32,7 +32,6 @@ const initialState: Cart = {
 export const cartActions = {
   addToCart: "cart/addToCart",
   removeFromCart: "cart/removeFromCart",
-  orderCreated: "cart/orderCreated",
   clearCart: "cart/clearCart",
 };
 
@@ -60,20 +59,9 @@ export const removeFromCart = createAsyncThunk(
   }
 );
 
-export const orderCreated = createAsyncThunk(
-  cartActions.orderCreated,
-  async (item: void, thunkApi) => {
-    try {
-      return await cartService.orderCreated();
-    } catch (error) {
-      return thunkApi.rejectWithValue((error as Error).message);
-    }
-  }
-);
-
 export const clearCart = createAsyncThunk(
   cartActions.clearCart,
-  (item: void, thunkApi) => {
+  (_item: void, thunkApi) => {
     try {
       return cartService.clearCart();
     } catch (error) {
@@ -93,14 +81,6 @@ const cartSlice = createSlice({
       })
       .addCase(removeFromCart.fulfilled, (state, action) => {
         state.items = action.payload!;
-      })
-      .addCase(orderCreated.fulfilled, (state, action) => {
-        state.items = action.payload!;
-      })
-      .addCase(orderCreated.rejected, (state) => {
-        const items = (JSON.parse(localStorage.getItem("cart")!) as Cart)
-          ?.items as Item[];
-        state.items = items;
       })
       .addCase(clearCart.fulfilled, (state) => {
         state.items = [];

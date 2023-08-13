@@ -1,20 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import userService from "./service";
 
-export interface User {
-  _id: string;
-  name: string;
-  email: string;
-  verified: boolean;
+interface Token {
+  accessToken: string;
+  refreshToken: string;
 }
 export interface Auth {
-  user: User | null;
+  user: Token | null;
   authenticated: boolean;
 }
 
 const initialState: Auth = {
-  user:
-    ((JSON.parse(localStorage.getItem("user")!) as Auth)?.user as User) || null,
+  user: (JSON.parse(localStorage.getItem("user")!) as Auth)?.user || null,
   authenticated:
     (JSON.parse(localStorage.getItem("user")!) as Auth)?.authenticated || false,
 };

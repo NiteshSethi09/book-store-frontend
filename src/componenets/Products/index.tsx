@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { axiosInstance } from "../../utils/axiosInstance";
 import ItemCard, { cardProps } from "../ItemCard";
+import { getAllProductsAPI } from "@/api/product";
 
 const Products = () => {
   const [products, setProducts] = useState<cardProps[]>([]);
@@ -9,8 +9,8 @@ const Products = () => {
 
   useEffect(() => {
     async function getProducts() {
-      const result = await axiosInstance.get("/product/get-products");
-      setProducts(result.data.data);
+      const products = await getAllProductsAPI();
+      setProducts(products.data);
       setIsloading(false);
     }
 

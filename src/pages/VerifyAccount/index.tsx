@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { Player } from "@lottiefiles/react-lottie-player";
-
-import { axiosInstance } from "../../utils/axiosInstance";
+import { verifyAccountAPI } from "@/api/user";
 
 const VerifyAccount = () => {
   const { token } = useParams();
@@ -13,9 +12,7 @@ const VerifyAccount = () => {
 
   useEffect(() => {
     async function handle() {
-      const { data } = await axiosInstance.post(
-        `/user/verify-account/${token}`
-      );
+      const data = await verifyAccountAPI(token!);
       setLoading(false);
       setError(data?.error);
       setMessage(data?.message);

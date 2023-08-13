@@ -1,7 +1,7 @@
-import { axiosInstance } from "../../utils/axiosInstance";
+import { userLoginAPI } from "@/api/user";
 
 const login = async (user: { email: string; password: string }) => {
-  const { data } = await axiosInstance.post("/user/login", user);
+  const data = await userLoginAPI(user);
 
   if (data.error) {
     throw new Error(data.message);

@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Alert, Button, Card, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../utils/axiosInstance";
+import { userSignupAPI } from "@/api/user";
 
 function Signup() {
   const [name, setName] = useState<string>("");
@@ -25,11 +25,9 @@ function Signup() {
       setResponseMessage("Make sure both passwords match.");
       return;
     }
-    const { data } = await axiosInstance.post("/user/signup", {
-      name,
-      email,
-      password,
-    });
+
+    const data = await userSignupAPI(name, email, password);
+
     console.log(data);
     setResponseError(data.error);
     setResponseMessage(data.message);

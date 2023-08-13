@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Alert, Button, Container, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import { axiosInstance } from "../../utils/axiosInstance";
+import { resetPasswordAPI } from "@/api/user";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState<string>("");
@@ -14,9 +14,7 @@ const ResetPassword = () => {
   const handlePasswordReset = async (e: FormEvent) => {
     e.preventDefault();
 
-    const { data } = await axiosInstance.post(`/user/reset-password/${token}`, {
-      password,
-    });
+    const data = await resetPasswordAPI(token!, password);
 
     if (data.error) {
       setShowAlert(true);

@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import useRazorpay from "react-razorpay";
 import Counter from "../Counter";
-import { clearCart, Item } from "../../redux/Cart/slice";
-import { AppDispatch } from "../../redux/store";
-import { Auth, User } from "../../redux/UserStore/slice";
-import { axiosInstance } from "../../utils/axiosInstance";
-import { razorpayKeyId } from "../../utils/config";
+
+import { clearCart, Item } from "@/redux/Cart/slice";
+import { AppDispatch } from "@/redux/store";
+import { Auth } from "@/redux/UserStore/slice";
+import { razorpayKeyId } from "@/utils/config";
+import { parseJwt } from "@/lib/jwt";
+import { createOrderAPI } from "@/api/order";
 
 function CartItemCard({ product, quantity }: Item) {
   return (
@@ -40,36 +42,31 @@ function CartItemCard({ product, quantity }: Item) {
 const Cart = () => {
   const cartItems: Item[] = useSelector((state) => (state as any).cart.items);
 
-  const isUserLoggedIn: boolean = (
-    JSON.parse(localStorage.getItem("user")!) as Auth
-  )?.authenticated;
-
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
   const Razorpay = useRazorpay();
 
   const handleOrder = async () => {
-    if (!isUserLoggedIn) {
+    const accessToken = (JSON.parse(localStorage.getItem("user")!) as Auth)
+      ?.user?.accessToken!;
+    if (!accessToken) {
       return navigate("/login", { state: { redirectTo: location.pathname } });
     }
 
     await handlePayment();
   };
 
-  const createOrder = async (items: Item[], user: User) => {
-    const result = await axiosInstance.post("/razorpay/create-order", {
-      items,
-      user,
-    });
-
-    return result.data;
-  };
-
   const handlePayment = async () => {
-    const user = (JSON.parse(localStorage.getItem("user")!) as Auth)?.user;
+    const accessToken = (JSON.parse(localStorage.getItem("user")!) as Auth)
+      ?.user?.accessToken!;
 
-    const order = await createOrder(cartItems, user!);
+    const user = parseJwt(accessToken);
+
+    const order = await createOrderAPI(cartItems, {
+      _id: user.id,
+      name: user.name,
+    });
 
     if (order.error) {
       return alert(order.message);

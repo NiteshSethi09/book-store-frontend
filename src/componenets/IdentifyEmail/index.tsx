@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Alert, Button, Container, Form } from "react-bootstrap";
-import { axiosInstance } from "../../utils/axiosInstance";
+import { requestResetPasswordAPI } from "@/api/user";
 
 const IdentifyEmail = () => {
   const [email, setEmail] = useState<string>("");
@@ -11,10 +11,7 @@ const IdentifyEmail = () => {
   const handleResetPasswordMail = async (e: FormEvent) => {
     e.preventDefault();
 
-    const { data } = await axiosInstance.post("/user/reset-password", {
-      email,
-    });
-    console.log(data);
+    const data = await requestResetPasswordAPI(email);
 
     if (data.error) {
       setIsEmailSent(false);
