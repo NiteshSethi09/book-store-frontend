@@ -47,6 +47,7 @@ axiosInstance.interceptors.response.use(
               ...prevRequest.headers,
               Authorization: "Bearer " + data.data.user.accessToken,
             },
+            data: JSON.parse(prevRequest.data),
           })
         )
         .catch((refreshTokenAPIError) => {
