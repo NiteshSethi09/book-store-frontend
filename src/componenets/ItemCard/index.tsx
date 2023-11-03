@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { Card, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../redux/Cart/slice";
-import { AppDispatch } from "../../redux/store";
+import { addToCart } from "@/redux/Cart/slice";
+import { AppDispatch } from "@/redux/store";
 
 export interface cardProps {
   _id: string;
@@ -14,13 +14,7 @@ export interface cardProps {
   price: { originalPrice: number; offerPrice: number };
 }
 
-function ItemCard({ description, imageUrl, price, title, _id }: cardProps) {
-  const splitDescription = description.split(" ");
-  if (splitDescription.length > 25) {
-    description = splitDescription.slice(0, 25).join(" ") + " ...";
-  } else {
-    description = splitDescription.join(" ");
-  }
+function ItemCard({ imageUrl, price, title, _id }: cardProps) {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleAdd = (id: string) => {
@@ -28,9 +22,7 @@ function ItemCard({ description, imageUrl, price, title, _id }: cardProps) {
   };
 
   return (
-    <Card
-      style={{ marginBottom: "10px", alignItems: "stretch", display: "flex" }}
-    >
+    <Card style={{ marginBottom: "20px", height: "500px" }}>
       <Card.Img
         style={{ height: "300px" }}
         variant="top"
@@ -39,11 +31,17 @@ function ItemCard({ description, imageUrl, price, title, _id }: cardProps) {
       />
       <Card.Body>
         <Card.Title>{title}</Card.Title>
-        {/* <Card.Text>{description}</Card.Text> */}
         <Card.Text>RS. {price.offerPrice}</Card.Text>
       </Card.Body>
-      <Card.Body>
-        <Button variant="primary" onClick={() => handleAdd(_id)}>
+      <Card.Body
+        style={{
+          paddingTop: 0,
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "end",
+        }}
+      >
+        <Button variant="dark" onClick={() => handleAdd(_id)}>
           Add to cart
         </Button>
       </Card.Body>

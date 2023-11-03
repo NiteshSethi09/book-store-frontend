@@ -19,8 +19,8 @@ const Products = () => {
   if (isloading) return <h2>Loading...</h2>;
   return (
     <>
-      <Container>
-        <Row md={5} xs={1}>
+      <Container style={{ marginTop: 30, marginBottom: 30 }}>
+        <Row lg={5} md={4} sm={2} xs={1}>
           {products?.map((product) => (
             <Col key={product._id}>
               <ItemCard {...product} />
